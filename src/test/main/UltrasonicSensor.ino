@@ -6,7 +6,7 @@
 #define trigPin3 7
 #define echoPin3 8
 /*============================================================================*/
-long duration, distance, RightSensor,BackSensor,FrontSensor,LeftSensor;
+long duration, distance, RightSensor,FrontSensor,LeftSensor;
 
 void setup(){
 Serial.begin (9600);
