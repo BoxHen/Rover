@@ -1,10 +1,12 @@
 /*===============================DEFINITIONS==================================*/
 #define trigPin1 3
-#define echoPin1 2
+#define echoPin1 2 // Right
+
 #define trigPin2 4
-#define echoPin2 5
-#define trigPin3 7
-#define echoPin3 8
+#define echoPin2 5 // Front
+
+//#define trigPin3 7
+//#define echoPin3 8
 /*============================================================================*/
 long duration, distance, RightSensor,FrontSensor,LeftSensor;
 
@@ -12,22 +14,23 @@ void setup(){
 Serial.begin (9600);
 pinMode(trigPin1, OUTPUT); pinMode(echoPin1, INPUT);// sets the trigpin as output, sets the echopin as input and following
 pinMode(trigPin2, OUTPUT); pinMode(echoPin2, INPUT);
-pinMode(trigPin3, OUTPUT); pinMode(echoPin3, INPUT);
+//pinMode(trigPin3, OUTPUT); pinMode(echoPin3, INPUT);
 }
 
 void loop() {
 SonarSensor(trigPin1, echoPin1); //trig->pin3  echo->pin2
 RightSensor = distance;
 SonarSensor(trigPin2, echoPin2); //trig->pin4  echo->pin5
-LeftSensor = distance;
-SonarSensor(trigPin3, echoPin3); //trig->pin5  echo->pin7
 FrontSensor = distance;
 
-Serial.print(LeftSensor);
+//SonarSensor(trigPin3, echoPin3); //trig->pin5  echo->pin7
+//LeftSensor = distance;
+
+Serial.print(RightSensor);
 Serial.print(" - ");
 Serial.print(FrontSensor);
-Serial.print(" - ");
-Serial.println(RightSensor);
+//Serial.print(" - ");
+//Serial.println(RightSensor);
 }
 /*================================FUNCTION===================================*/
 void SonarSensor(int trigPin,int echoPin){
