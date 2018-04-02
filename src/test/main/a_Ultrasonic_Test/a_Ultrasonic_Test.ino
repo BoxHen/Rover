@@ -14,15 +14,16 @@
 
 long duration, distance, RightSensor,FrontSensor,LeftSensor;
 
-/*=====================================VARIABLES FOR MOTOR==========================================*/
-int mLeft = 9; //left
-int mRight =10; //right
+/*=====================================DEFINITIONS/VARIABLES FOR MOTOR==========================================*/
+#define LeftMotorDirection 6 //reverse->1, Forward->0
+#define RightMotorDirection 7 
 /*================================DEFINITIONS/VARIABLES FOR PWM=====================================*/
 // This is the PWMthat goes to motor 
-#define PWMout 11 // LED connected to digital pin 9
+#define PWMoutLeft 10 
+#define PWMoutRight 11 
 
-//int analogPin = 12; // Use this if we decide for variable value - slow down/up motor speed
-int val = 400; // variable to store the read value
+//int analogPin = 13; // Use this if we decide for variable value - slow down/up motor speed
+int val = 800; // variable to store the read value
 // this is a little over 1/3 speed where 1023 is max speed
 
 

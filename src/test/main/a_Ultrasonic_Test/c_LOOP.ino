@@ -18,28 +18,31 @@ void loop() {
   
 /*================================================MOTOR=======================================================*/
   if(RightSensor <=7 && FrontSensor <=5){ // turn left
-    digitalWrite(mLeft, LOW); // try to reverse this !!!
-    digitalWrite(mRight, HIGH);
-    delay(100);
+    //digitalWrite(mLeft, LOW); // try to reverse this !!!
+    //digitalWrite(mRight, HIGH);
+    digitalWrite(LeftMotorDirection, HIGH); digitalWrite(RightMotorDirection, LOW); //reverse->1, Forward->0
+    //delay(100); // delay may cause probs --- test it
   }
-  else if(RightSensor <=7 && FrontSensor >5){ // forward
-    digitalWrite(mLeft, HIGH); 
-    digitalWrite(mRight, HIGH);
-    delay(100);
+  else if((RightSensor <=7 && FrontSensor >5) || (RightSensor >7 && FrontSensor >5)){ // forward
+    //digitalWrite(mLeft, HIGH); 
+    //digitalWrite(mRight, HIGH);
+    digitalWrite(LeftMotorDirection, LOW); digitalWrite(RightMotorDirection, LOW); //reverse->1, Forward->0
+    //delay(100);
   }
   else if(RightSensor > 7 && FrontSensor <= 5){ // turn right
-    digitalWrite(mLeft, HIGH);
-    digitalWrite(mRight, LOW);
-    delay(100);
+    //digitalWrite(mLeft, HIGH);
+    //digitalWrite(mRight, LOW);
+    digitalWrite(LeftMotorDirection, LOW); digitalWrite(RightMotorDirection, HIGH); //reverse->1, Forward->0
+    //delay(100);
   }
-  // will need a reverse!!!
+  // will need a reverse!!! but this may require three sensors in the case there is a wall in front and to either side 
 
   /*================================================PWM=======================================================*/
   //val = analogRead(analogPin); // Use if we want to speed/slow motor dynamically
                                  // analogRead will get a value from 0-1023
-  analogWrite(ledPin, (val / 4)); // value can be set to constant for specific speed or connected to some input to control motor speed
-   /*
-      analogWrite(pin, value)
+  analogWrite(PWMoutLeft, (val / 4)); // value can be set to constant for specific speed or connected to some input to control motor speed
+  analogWrite(PWMoutRight, (val / 4)); 
+   /*analogWrite(pin, value)
       pin: the pin to write to. Allowed data types: int.
       value: the duty cycle: between 0 (always off) and 255 (always on). Allowed data types: int
 

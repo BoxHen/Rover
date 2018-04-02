@@ -5,8 +5,11 @@ void setup(){
   pinMode(trigPin2, OUTPUT); pinMode(echoPin2, INPUT);
   //pinMode(trigPin3, OUTPUT); pinMode(echoPin3, INPUT);
 /*================================================MOTOR=======================================================*/
-  pinMode(mLeft, OUTPUT);
-  pinMode(mRight, OUTPUT);
+  //pinMode(mLeft, OUTPUT); // these were used for running motors at full speed(test)
+  //pinMode(mRight, OUTPUT); // PWM will now do that for us 
+  pinMode(LeftMotorDirection, OUTPUT);
+  pinMode(RightMotorDirection, OUTPUT);
 /*=================================================PWM========================================================*/
-  pinMode(PWMout, OUTPUT); // sets the pin as output
+  pinMode(PWMoutLeft, OUTPUT); // sets the pin as output
+  pinMode(PWMoutRight, OUTPUT);
 }
