@@ -50,5 +50,20 @@ void loop() {
       analogWrite values from 0 to 255
 
       reference: https://www.tutorialspoint.com/arduino/arduino_pulse_width_modulation.htm */
+      
+ /*===============================================ENCODER======================================================*/
+  if(){
+    n = digitalRead(encoder0PinA);
+    if ((encoder0PinALast == LOW) && (n == HIGH)) {
+      if (digitalRead(encoder0PinB) == LOW) {
+        encoder0Pos--;
+      } else {
+        encoder0Pos++;
+      }
+      Serial.print (encoder0Pos);
+      Serial.print ("/");
+    }
+    encoder0PinALast = n;
+  } 
 
 }

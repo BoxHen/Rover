@@ -1,6 +1,6 @@
 void setup(){
 /*==========================================ULTRASONIC SENSOR=================================================*/
-  Serial.begin (9600);
+  Serial.begin (115200); // was 9600
   pinMode(trigPin1, OUTPUT); pinMode(echoPin1, INPUT);// sets the trigpin as output, sets the echopin as input and following
   pinMode(trigPin2, OUTPUT); pinMode(echoPin2, INPUT);
   //pinMode(trigPin3, OUTPUT); pinMode(echoPin3, INPUT);
@@ -12,4 +12,8 @@ void setup(){
 /*=================================================PWM========================================================*/
   pinMode(PWMoutLeft, OUTPUT); // sets the pin as output
   pinMode(PWMoutRight, OUTPUT);
+/*===============================================ENCODER======================================================*/
+  pinMode(EncoderPinA, INPUT);
+  pinMode(EncoderPinB, INPUT);
+
 }
