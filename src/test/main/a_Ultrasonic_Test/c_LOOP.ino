@@ -17,31 +17,33 @@ void loop() {
   //Serial.println(RightSensor);
   
 /*================================================MOTOR=======================================================*/
-  if(RightSensor <=7 && FrontSensor <=5){ // turn left
-    //digitalWrite(mLeft, LOW); // try to reverse this !!!
-    //digitalWrite(mRight, HIGH);
-    digitalWrite(LeftMotorDirection, HIGH); digitalWrite(RightMotorDirection, LOW); //reverse->1, Forward->0
-    //delay(100); // delay may cause probs --- test it
+  if(RightSensor <=20 && FrontSensor <=15){ // turn left
+    //digitalWrite(LeftMotorDirection2, LOW);   digitalWrite(RightMotorDirection2, HIGH); // in1
+    analogWrite(PWMoutLeft, 0); analogWrite(PWMoutRight, (val / 4)); 
+    digitalWrite(LeftMotorDirection, HIGH);  digitalWrite(RightMotorDirection, LOW); // in2    //delay(100); // delay may cause probs --- test it
+    Serial.print(" |--1--| ");
+    delay(100);
   }
-  else if((RightSensor <=7 && FrontSensor >5) || (RightSensor >7 && FrontSensor >5)){ // forward
-    //digitalWrite(mLeft, HIGH); 
-    //digitalWrite(mRight, HIGH);
-    digitalWrite(LeftMotorDirection, LOW); digitalWrite(RightMotorDirection, LOW); //reverse->1, Forward->0
-    //delay(100);
+  else if((RightSensor <=20 && FrontSensor >15) || (RightSensor >20  && FrontSensor >15)){ // forward
+    //digitalWrite(LeftMotorDirection2, HIGH);  digitalWrite(RightMotorDirection2, HIGH); // in1
+    analogWrite(PWMoutLeft, (val / 4)); analogWrite(PWMoutRight, (val / 4)); 
+    digitalWrite(LeftMotorDirection, LOW);    digitalWrite(RightMotorDirection, LOW); // in2
+    Serial.print("--2--");
+    delay(100);
   }
-  else if(RightSensor > 7 && FrontSensor <= 5){ // turn right
-    //digitalWrite(mLeft, HIGH);
-    //digitalWrite(mRight, LOW);
-    digitalWrite(LeftMotorDirection, LOW); digitalWrite(RightMotorDirection, HIGH); //reverse->1, Forward->0
-    //delay(100);
+  else if(RightSensor > 20 && FrontSensor <= 15){ // turn right
+    //digitalWrite(LeftMotorDirection2, HIGH);  digitalWrite(RightMotorDirection2, LOW); // in1
+    analogWrite(PWMoutLeft, (val / 4)); analogWrite(PWMoutRight, 0); 
+    digitalWrite(LeftMotorDirection, LOW);    digitalWrite(RightMotorDirection, HIGH); // in2
+    Serial.print("--3--");
+    delay(100);
   }
   // will need a reverse!!! but this may require three sensors in the case there is a wall in front and to either side 
 
   /*================================================PWM=======================================================*/
-  //val = analogRead(analogPin); // Use if we want to speed/slow motor dynamically
+  /*//val = analogRead(analogPin); // Use if we want to speed/slow motor dynamically
                                  // analogRead will get a value from 0-1023
-  analogWrite(PWMoutLeft, (val / 4)); // value can be set to constant for specific speed or connected to some input to control motor speed
-  analogWrite(PWMoutRight, (val / 4)); 
+  analogWrite(PWMoutLeft, (val / 4)); analogWrite(PWMoutRight, (val / 4)); 
    /*analogWrite(pin, value)
       pin: the pin to write to. Allowed data types: int.
       value: the duty cycle: between 0 (always off) and 255 (always on). Allowed data types: int
@@ -52,16 +54,16 @@ void loop() {
       reference: https://www.tutorialspoint.com/arduino/arduino_pulse_width_modulation.htm */
       
  /*===============================================ENCODER======================================================*/
-    n = digitalRead(encoder0PinA);
-    if ((encoder0PinALast == LOW) && (n == HIGH)) {
-      if (digitalRead(encoder0PinB) == LOW) {
-        encoder0Pos--;
-      } else {
-        encoder0Pos++;
+    n = digitalRead(EncoderPinA);
+    if((EncoderPinALast == LOW) && (n == HIGH)) {
+      if(digitalRead(EncoderPinB) == LOW) {
+        EncoderPosition--;
+      } else{
+        EncoderPosition++;
       }
-      Serial.print (encoder0Pos);
+      Serial.print (EncoderPosition);
       Serial.print ("/");
     }
-    encoder0PinALast = n; 
+    EncoderPinALast = n; 
 
 }

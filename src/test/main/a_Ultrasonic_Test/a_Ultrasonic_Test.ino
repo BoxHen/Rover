@@ -23,13 +23,14 @@ long duration, distance, RightSensor,FrontSensor,LeftSensor;
 #define PWMoutRight 11 
 
 //int analogPin = 13; // Use this if we decide for variable value - slow down/up motor speed
-int val = 800; // variable to store the read value
+int val = 400; // variable to store the read value
 // this is a little over 1/3 speed where 1023 is max speed
 
 /*================================DEFINITIONS/VARIABLES FOR ENCODER=====================================*/
 #define EncoderPinA 12;
 #define EncoderPinB 13;
 int EncoderPosition = 0;
-int n;
+int EncoderPinALast = LOW;
+int n = LOW;
 
 
