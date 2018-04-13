@@ -13,7 +13,8 @@ void setup(){
   pinMode(PWMoutLeft, OUTPUT); // sets the pin as output
   pinMode(PWMoutRight, OUTPUT);
 /*===============================================ENCODER======================================================*/
-  pinMode(EncoderPinA, INPUT);
-  pinMode(EncoderPinB, INPUT);
-
+  pinMode(EncoderPin, INPUT);
+  attachInterrupt(0,Counter, RISING); // triggers on rising edge(low to high)
+                                      // Interrupt 0 is digital pin 2, so that is where the IR detector is connected
+  volatile long pulses = 0;
 }

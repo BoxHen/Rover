@@ -54,16 +54,6 @@ void loop() {
       reference: https://www.tutorialspoint.com/arduino/arduino_pulse_width_modulation.htm */
       
  /*===============================================ENCODER======================================================*/
-    n = digitalRead(EncoderPinA);
-    if((EncoderPinALast == LOW) && (n == HIGH)) {
-      if(digitalRead(EncoderPinB) == LOW) {
-        EncoderPosition--;
-      } else{
-        EncoderPosition++;
-      }
-      Serial.print (EncoderPosition);
-      Serial.print ("/");
-    }
-    EncoderPinALast = n; 
+
 
 }
