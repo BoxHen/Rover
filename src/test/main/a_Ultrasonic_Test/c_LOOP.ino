@@ -17,26 +17,26 @@ void loop() {
   //Serial.println(RightSensor);
   
 /*================================================MOTOR=======================================================*/
-  if(RightSensor <=20 && FrontSensor <=15){ // turn left
+  if(RightSensor <=20 && FrontSensor <=20){ // turn left
     //digitalWrite(LeftMotorDirection2, LOW);   digitalWrite(RightMotorDirection2, HIGH); // in1
     analogWrite(PWMoutLeft, 0); analogWrite(PWMoutRight, (val / 4)); 
     digitalWrite(LeftMotorDirection, HIGH);  digitalWrite(RightMotorDirection, LOW); // in2    //delay(100); // delay may cause probs --- test it
     Serial.print(" |--1--| ");
-    delay(100);
+    delay(1300);
   }
-  else if((RightSensor <=20 && FrontSensor >15) || (RightSensor >20  && FrontSensor >15)){ // forward
+  else if((RightSensor <=20 && FrontSensor >20) || (RightSensor >20  && FrontSensor >20)){ // forward
     //digitalWrite(LeftMotorDirection2, HIGH);  digitalWrite(RightMotorDirection2, HIGH); // in1
     analogWrite(PWMoutLeft, (val / 4)); analogWrite(PWMoutRight, (val / 4)); 
     digitalWrite(LeftMotorDirection, LOW);    digitalWrite(RightMotorDirection, LOW); // in2
     Serial.print("--2--");
     delay(100);
   }
-  else if(RightSensor > 20 && FrontSensor <= 15){ // turn right
+  else if(RightSensor > 20 && FrontSensor <= 20){ // turn right
     //digitalWrite(LeftMotorDirection2, HIGH);  digitalWrite(RightMotorDirection2, LOW); // in1
     analogWrite(PWMoutLeft, (val / 4)); analogWrite(PWMoutRight, 0); 
     digitalWrite(LeftMotorDirection, LOW);    digitalWrite(RightMotorDirection, HIGH); // in2
     Serial.print("--3--");
-    delay(100);
+    delay(1300);
   }
   // will need a reverse!!! but this may require three sensors in the case there is a wall in front and to either side 
 
