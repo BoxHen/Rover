@@ -2,65 +2,92 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-
-uint16_t distance, distance2;
-uint8_t flags;
+#include "ultrasonic.h"
 
 // DETECTS BOTH RISING EDGE AND FALLING EDGE OF INT0
 // ON THE RISING EDGE , WE START THE COUNTER, WE WILL SET THE FLAG TO ZERO. WAITING FOR THE FLALING EDGE
 // AFTER THE FALLING EDGE , WE GET THE DISTANCE
-ISR(INT0_vect){
+ISR(PCINT0_vect){
 	if(flags & (1 << 0)){
-		TCNT1 = 0;
-	}else{
-		distance = (TCNT1)/ 58;
-	}
-	flags &= ~(1 << 0);
-}
-
-// DETECTS BOTH RISING EDGE AND FALLING EDGE OF INT1
-// ON THE RISING EDGE , WE START THE COUNTER, WE WILL SET THE FLAG TO ZERO. WAITING FOR THE FLALING EDGE
-// AFTER THE FALLING EDGE , WE GET THE DISTANCE
-ISR(INT1_vect){
-	if(flags & (1 << 1)){
 		TCNT1 = 0;
 	}else{
 		distance2 = (TCNT1)/ 58;
 	}
+	flags &= ~(1 << 0);
+}
+
+ISR(PCINT1_vect){
+	if(flags & (1 << 1)){
+		TCNT1 = 0;
+	}else{
+		distance = (TCNT1)/ 58;
+	}
 	flags &= ~(1 << 1);
 }
+
+ISR(PCINT2_vect){
+	if(flags & (1 << 2)){
+		TCNT1 = 0;
+	}else{
+		distance2 = (TCNT1)/ 58;
+	}
+	flags &= ~(1 << 2);
+}
 /*============================================================================*/
-void find_distance(){
+void init_ultrasonic(){
+	// set PORT5, PORT4, PORT3, PORT1 and PORT0 to outputs
+  DDRC = (1 << PC5 | 1 << PC4 | 1 << PC3 | 1 << PC1 | 1 << PC0);
+  //set clock no scaling
+  //set WGM = 4: CTC mode clear on OCR1A
+  TCCR1A = 0x00;
+  TCCR1B = 0x01;
+}
+/*============================================================================*/
+void distanceLeft(){
 	flags |= (1 << 0);
 	//DISABLE external interrupt
-	EIMSK  = 0x00;
+	PCMSK0 = 0x00;
 	// send 10us pulse to sensors
 	PORTC |= (1 << PC5);
 	_delay_us(50);
 	PORTC &= ~(1 << PC5);
 	//ENABLE external interrupt
-	EIMSK  = 0x03;
+	PCMSK0 = 0x03;
 	_delay_ms(60);
 	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
 }
 
-void find_distance2(){
+void distanceFront(){
 	flags |= (1 << 1);
 	//DISABLE external interrupt
-	EIMSK  = 0x00;
+	PCMSK1 = 0x00;
 	// send 10us pulse to sensors
 	PORTC |= (1 << PC4);
 	_delay_us(50);
 	PORTC &= ~(1 << PC4);
 	//ENABLE external interrupt
-	EIMSK  = 0x03;
+	PCMSK1 = 0x03;
+	_delay_ms(60);
+	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
+}
+
+void distanceRight(){
+	flags |= (1 << 2);
+	//DISABLE external interrupt
+	PCMSK2 = 0x00;
+	// send 10us pulse to sensors
+	PORTC |= (1 << PC3);
+	_delay_us(50);
+	PORTC &= ~(1 << PC3);
+	//ENABLE external interrupt
+	PCMSK2 = 0x03;
 	_delay_ms(60);
 	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
 }
 /*============================================================================*/
 int main(){
   // set PORT5, PORT2 and PORT1 to outputs
-  DDRC = (1 << PC5 | 1 << PC1 | 1 << PC0 | 1 << PC4);
+  DDRC = (1 << PC5 | 1 << PC4 | 1 << PC3 | 1 << PC1 | 1 << PC0);
   //set clock no scaling
   //set WGM = 4: CTC mode clear on OCR1A
   TCCR1A = 0x00;
