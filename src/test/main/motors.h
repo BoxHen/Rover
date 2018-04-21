@@ -1,11 +1,7 @@
 #ifndef motors_H
 #define motors_H
 
-#include <avr/io.h>
-#include <stdint.h>
-#include <util/delay.h>
-
-void init_motors ();
+void init_motors();
 
 void leftmotor_foward();
 void leftmotor_reverse();
