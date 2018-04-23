@@ -7,7 +7,7 @@ You always have to call this in main to intialize the PORT I/O
 void init_motors(){
 	//PB1 -> LEFTA  -- AIN
 	//PB2 -> LEFTB  -- BIN
-	//PB3 -> RIGHTA -- AIN 
+	//PB3 -> RIGHTA -- AIN
 	//PB4 -> RIGHTB -- BIN
 	DDRB = (1 << PB4 | 1 << PB3 | 1 << PB2 | 1 << PB1); //set as outputs
 	brake();
@@ -21,46 +21,66 @@ ____|_______|___________
 1	|	1	|	brake      */
 /*==========================REVERSE============================*/
 void leftmotor_reverse(){
-	PORTB &= ~(1 << PB1);// --AIN:0 
+	PORTB &= ~(1 << PB1);// --AIN:0
 	PORTB |= (1 << PB2); // --BIN:1
 }
 
 void rightmotor_reverse(){
-	PORTB &= ~(1 << PB3);// --AIN:0 
+	PORTB &= ~(1 << PB3);// --AIN:0
 	PORTB |= (1 << PB4); // --BIN:1
 }
 /*==========================BRAKE============================*/
 void leftmotor_brake(){
-	PORTB |= (1 << PB1);//  --AIN:1 
+	PORTB |= (1 << PB1);//  --AIN:1
 	PORTB |= (1 << PB2); // --BIN:1
 }
 
 void rightmotor_brake(){
-	PORTB |= (1 << PB3);//  --AIN:1 
+	PORTB |= (1 << PB3);//  --AIN:1
 	PORTB |= (1 << PB4); // --BIN:1
 }
 /*==========================FORWARD============================*/
 void leftmotor_foward(){
-	PORTB |= (1 << PB1);//   --AIN:1 
+	PORTB |= (1 << PB1);//   --AIN:1
 	PORTB &= ~(1 << PB2); // --BIN:0
 }
 
 void rightmotor_foward(){
-	PORTB |= (1 << PB3);//   --AIN:1 
+	PORTB |= (1 << PB3);//   --AIN:1
 	PORTB &= ~(1 << PB4); // --BIN:0
 }
 /*==========================COAST============================*/
 void leftmotor_coast(){
-	PORTB &= ~(1 << PB1);//  --AIN:0 
+	PORTB &= ~(1 << PB1);//  --AIN:0
 	PORTB &= ~(1 << PB2); // --BIN:0
 }
 
 void rightmotor_coast(){
-	PORTB &= ~(1 << PB3);//  --AIN:0 
+	PORTB &= ~(1 << PB3);//  --AIN:0
 	PORTB &= ~(1 << PB4); // --BIN:0
 }
 /*======================================================*/
 void brake(){
     leftmotor_brake();
     rightmotor_brake();
+}
+
+void turnRight(){
+	leftmotor_foward();
+	rightmotor_reverse();
+}
+
+void turnLeft(){
+	rightmotor_foward();
+	leftmotor_reverse();
+}
+
+void forward(){
+	leftmotor_foward();
+	rightmotor_foward();
+}
+
+void(){
+	leftmotor_reverse();
+	rightmotor_reverse();
 }

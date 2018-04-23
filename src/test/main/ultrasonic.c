@@ -33,6 +33,14 @@ ISR(PCINT2_vect){ //Right
 	}
 	flags &= ~(1 << 2);
 }
+ISR(INT0_vect){
+	if(flags & (1 << 3)){
+		TCNT1 = 0;
+	}else{
+		distanceLeft = (TCNT1)/ 58;
+	}
+	flags &= ~(1 << 3); flags &= ~(1 << 0);
+}
 /*============================================================================*/
 void init_ultrasonic(){
 	// set PORT5, PORT4, PORT3, PORT2, PORT1 and PORT0 to outputs
@@ -46,6 +54,9 @@ void init_ultrasonic(){
 	PCMSK1 = 0x01;// USE PCINT8
 	PCMSK2 = 0x10;//USE PCINT20
 	PCICR =  0x07;// Any change on any enabled PCINT[7:0], PCINT[14:8], PCINT[23:16] pin will cause an interrupt
+	//for INT0
+	EIMSK  = 0x01;//turn on INT0
+	EICRA  = 0x01;// any logic change on INT0 will generate interrupt request
 
 	ACSR &= ~(1 << 2);
 	// enable global interrupt
@@ -62,7 +73,7 @@ void distanceLeft(){ //use pcint6 PB5
 	_delay_us(50);
 	PORTC &= ~(1 << PC5);
 	//ENABLE external interrupt
-	PCMSK0 = 0x40; 
+	PCMSK0 = 0x40;
 	_delay_ms(60);
 	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
 }
@@ -94,6 +105,20 @@ void distanceRight(){ // use pcint20 pc2
 	_delay_ms(60);
 	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
 }
+
+void distanceUpperFront(){ // use pcint20 pc2
+	flags |= (1 << 3);
+	//DISABLE external interrupt
+	EIMSK = 0x00;
+	// send 10us pulse to sensors
+	PORTC |= (1 << PC2);
+	_delay_us(50);
+	PORTC &= ~(1 << PC2);
+	//ENABLE external interrupt
+	EIMSK = 0x01
+	_delay_ms(60);
+	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
+}
 /*============================================================================*/
 /*int main(){
   init_ultrasonic();
@@ -108,13 +133,13 @@ void distanceRight(){ // use pcint20 pc2
 		}else{
 			PORTB &= ~(1 << PB5);
 		}
-            
+
 		if (distanceF < 10){
 			PORTC |= (1 << PC1);
 		}else{
 			PORTC &= ~(1 << PC1);
 		}
-		
+
 		if (distanceR < 10){
 			PORTC |= (1 << PC2);
 		}else{

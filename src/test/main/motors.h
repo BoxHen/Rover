@@ -14,5 +14,9 @@ void rightmotor_brake();
 void rightmotor_coast();
 
 void brake();
+void turnRight();
+void turnLeft();
+void forward();
+void reverse();
 
 #endif

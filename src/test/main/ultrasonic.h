@@ -14,5 +14,6 @@ void init_ultrasonic();
 void distanceLeft();
 void distanceFront();
 void distanceRight();
+void distanceUpperFront();
 
 #endif // ultrasonic_H

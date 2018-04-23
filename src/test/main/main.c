@@ -7,7 +7,7 @@
 #include "motors.h"
 
 int main(){
-  init_motors();	
+  init_motors();
   init_ultrasonic();
 
   while(1) {
@@ -23,10 +23,10 @@ int main(){
 			PORTB &= ~(1 << PB5);
 			brake();
 		}
-        //=====================================    
+    //=====================================
 		if (distanceF < 10){
 			PORTC |= (1 << PC1);
-			
+
 			//leftmotor_foward();
 			//rightmotor_foward();
 		}else{
