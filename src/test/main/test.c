@@ -16,8 +16,24 @@ int main(){
 		distanceFront();
 
     if(distanceL < distanceR){ // go to left wall since it is closer
-      turnLeft(); // make this a 90deg turn - we will need encoders to do this
-      while()
+      //turnLeft(); // make this a 90deg turn - we will need encoders to do this
+      while(1){
+        turnLeft();
+        if(distanceL<10) break;
+      }
+      while(1){
+        forward();
+        if(distanceF<5 && distanceUpperFront>5){
+          turnRight();
+          if(distanceL<5) forward();
+          turnLeft();
+          if(distanceL<5) forward();
+          turnLeft();
+          if(distanceL<5 && distanceF>5) forward();
+          turnRight();
+        }
+        if(distanceL<5 && distanceFront<5 && distanceUpperFront<5) break; // get to corner
+      }
     }else{ // go to right wall since it is closer
       turnRight();
     }
