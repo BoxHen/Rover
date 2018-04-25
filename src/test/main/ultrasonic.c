@@ -43,24 +43,21 @@ ISR(INT0_vect){
 }
 /*============================================================================*/
 void init_ultrasonic(){
-	// set PORT5, PORT4, PORT3, PORT2, PORT1 and PORT0 to outputs
 	DDRC = (1 << PC5 | 1 << PC4 | 1 << PC3 | 1 << PC2 | 1 << PC1);
 	DDRB = 1 << PB5;
 	//set WGM = 4: CTC mode clear on OCR1A
 	TCCR1A = 0x00;
-	TCCR1B = 0x01;//set clock no pre-scaling
+	TCCR1B = 0x01;// set clock no pre-scaling
 	// ENABLE EXTERNAL INTERRUPTS
-	PCMSK0 = 0x40;// turn on TO ENABLE PCINT[7:0] -- for pcint6
+	PCMSK0 = 0x40;// use PCINT6
 	PCMSK1 = 0x01;// USE PCINT8
-	PCMSK2 = 0x10;//USE PCINT20
+	PCMSK2 = 0x10;// USE PCINT20
 	PCICR =  0x07;// Any change on any enabled PCINT[7:0], PCINT[14:8], PCINT[23:16] pin will cause an interrupt
 	//for INT0
-	EIMSK  = 0x01;//turn on INT0
+	EIMSK  = 0x01;// turn on INT0
 	EICRA  = 0x01;// any logic change on INT0 will generate interrupt request
 
-	ACSR &= ~(1 << 2);
-	// enable global interrupt
-	sei();
+	sei();	// enable global interrupt
 
 }
 /*============================================================================*/
