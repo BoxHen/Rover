@@ -16,27 +16,36 @@ int main(){
 		distanceFront();
 
 		if (distanceL < 10){
-			PORTB |= (1 << PB5);
+			PORTB |= (1 << PB6);
 			leftmotor_foward();
 			rightmotor_foward();
 		}else{
-			PORTB &= ~(1 << PB5);
+			PORTB &= ~(1 << PB6);
 			brake();
 		}
     //=====================================
 		if (distanceF < 10){
-			PORTC |= (1 << PC1);
-
-			//leftmotor_foward();
-			//rightmotor_foward();
+			PORTB |= (1 << PB7);
+      leftmotor_reverse();
+      rightmotor_reverse();
 		}else{
-			PORTC &= ~(1 << PC1);
+			PORTB &= ~(1 << PB7);
+      brake();
 		}
 		//=====================================
 		if (distanceR < 10){
-			PORTC |= (1 << PC2);
+			PORTD |= (1 << PD5);
+      turnLeft();
 		}else{
-			PORTC &= ~(1 << PC2);
+			PORTD &= ~(1 << PD5);
+      brake();
+		}
+    //====================================
+    if (distanceUF < 10){
+			PORTD |= (1 << PD6);
+      turnRight();
+		}else{
+			PORTD &= ~(1 << PD6);
 		}
   }
   return 0;

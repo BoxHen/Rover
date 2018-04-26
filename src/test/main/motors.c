@@ -9,7 +9,10 @@ void init_motors(){
 	//PB2 -> LEFTB  -- BIN
 	//PB3 -> RIGHTA -- AIN
 	//PB4 -> RIGHTB -- BIN
-	DDRB = (1 << PB4 | 1 << PB3 | 1 << PB2 | 1 << PB1); //set as outputs
+	DDRB = (1 << PB4 | 1 << PB3 | 1 << PB2 | 1 << PB1 | 1 << PB0); //set as outputs
+	/*	DDRB = (1 << PB0); // output to other 328 based off COUNT value
+	    DDRD = ~(1 << PD7); //set as input for other 328*/
+	DDRD = 1 << PD7; // used to communicate with other 328
 	brake();
 }
 /*
@@ -66,13 +69,19 @@ void brake(){
 }
 
 void turnRight(){
+	PORTD |= (1 << PD7); // turn on PD7 so other 328 starts the turnCount
+	while( (PINB & (1 << PB0)) ){
 	leftmotor_foward();
 	rightmotor_reverse();
+	}
 }
 
 void turnLeft(){
+	PORTD |= (1 << PD7); // turn on PD7 so other 328 starts the turnCount
+	while( (PINB & (1 << PB0)) ){
 	rightmotor_foward();
 	leftmotor_reverse();
+	}
 }
 
 void forward(){
@@ -80,7 +89,7 @@ void forward(){
 	rightmotor_foward();
 }
 
-void(){
+void reverse(){
 	leftmotor_reverse();
 	rightmotor_reverse();
 }

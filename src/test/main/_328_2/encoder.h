@@ -5,4 +5,4 @@
 #include "ultrasonic.h"
 
 #define turnValue 200
-uint16_t COUNT, Temp;
+uint16_t COUNT, Temp, change;

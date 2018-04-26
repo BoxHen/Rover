@@ -9,7 +9,7 @@ ISR(INT1_vect){
 
 void init_encoders(){
 	DDRB = (1 << PB0); // output to other 328 based off COUNT value
-  DDRB = ~(1 << PB7); //set as input for other 328
+  DDRD = ~(1 << PD7); //set as input for other 328
 
   // ENABLE EXTERNAL INTERRUPTS
 	EIMSK  = 0x03;// turn on both INT0 and INT1
@@ -19,11 +19,12 @@ void init_encoders(){
 }
 
 void turnCount(){
-  if(PINC & (1 << PB7)){ // check if other 328 is requesting a count
+  if(PIND & (1 << PD7)){ // check if other 328 is requesting a count
+    PORTB |= (1 << PB0); // tells other 328 to turn
     Temp = COUNT;
     Temp = COUNT - Temp; // this takes the current count and subtracts the previous count stored in Temp
     if(Temp >= turnValue){
-      PORTB |= (1 << PB0);
+      PORTB &= ~(1 << PB0); // stop turning if this value passed
     }
   }
 }

@@ -6,7 +6,7 @@
 #include "ultrasonic.h"
 #include "motors.h"
 
-int main(){
+void algorithm(){
   init_motors();
   init_ultrasonic();
 
@@ -17,10 +17,7 @@ int main(){
 
     if(distanceL < distanceR){ // go to left wall since it is closer
       //turnLeft(); // make this a 90deg turn - we will need encoders to do this
-      while(1){
         turnLeft();
-        if(distanceL<10) break;
-      }
       while(1){
         forward();
         if(distanceF<5 && distanceUpperFront>5){
@@ -62,5 +59,6 @@ int main(){
 	// 		PORTC &= ~(1 << PC2);
 	// 	}
   // }
-  return 0;
+    return 0;
+  }
 }

@@ -6,7 +6,7 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-uint16_t distanceL, distanceF, distanceR;
+uint16_t distanceL, distanceF, distanceUF, distanceR;
 uint8_t flags; // storing zeros until flag is turned on
 
 void init_ultrasonic();

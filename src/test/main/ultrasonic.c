@@ -37,14 +37,15 @@ ISR(INT0_vect){
 	if(flags & (1 << 3)){
 		TCNT1 = 0;
 	}else{
-		distanceLeft = (TCNT1)/ 58;
+		distanceUF = (TCNT1)/ 58;
 	}
-	flags &= ~(1 << 3); flags &= ~(1 << 0);
+	flags &= ~(1 << 3); 
 }
 /*============================================================================*/
 void init_ultrasonic(){
 	DDRC = (1 << PC5 | 1 << PC4 | 1 << PC3 | 1 << PC2 | 1 << PC1);
-	DDRB = 1 << PB5;
+	DDRB = (1 << PB6 | 1 << PB7); // LEDS
+	DDRD = (1 << PD5 | 1 << PD6); // LEDS
 	//set WGM = 4: CTC mode clear on OCR1A
 	TCCR1A = 0x00;
 	TCCR1B = 0x01;// set clock no pre-scaling
@@ -61,7 +62,7 @@ void init_ultrasonic(){
 
 }
 /*============================================================================*/
-void distanceLeft(){ //use pcint6 PB5
+void distanceLeft(){ //use pcint6 PB6
 	flags |= (1 << 0);
 	//DISABLE external interrupt
 	PCMSK0 = 0x00;
@@ -75,7 +76,7 @@ void distanceLeft(){ //use pcint6 PB5
 	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
 }
 
-void distanceFront(){ // use pcint8 pc1
+void distanceFront(){ // use pcint8 PB7
 	flags |= (1 << 1);
 	//DISABLE external interrupt
 	PCMSK1 = 0x00;
@@ -89,7 +90,7 @@ void distanceFront(){ // use pcint8 pc1
 	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
 }
 
-void distanceRight(){ // use pcint20 pc2
+void distanceRight(){ // use pcint20 PD5
 	flags |= (1 << 2);
 	//DISABLE external interrupt
 	PCMSK2 = 0x00;
@@ -103,7 +104,7 @@ void distanceRight(){ // use pcint20 pc2
 	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
 }
 
-void distanceUpperFront(){ // use pcint20 pc2
+void distanceUpperFront(){ // use INT0 PD6
 	flags |= (1 << 3);
 	//DISABLE external interrupt
 	EIMSK = 0x00;
