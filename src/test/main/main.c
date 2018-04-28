@@ -5,48 +5,57 @@
 
 #include "ultrasonic.h"
 #include "motors.h"
+//#include "PWM.h"
 
 int main(){
+  //init_PWM();
   init_motors();
   init_ultrasonic();
+  
+  //uint8_t distanceL = 0x00; uint8_t distanceF = 0x00; uint8_t distanceR = 0x00; uint8_t distanceUF = 0x00; 
 
-  while(1) {
-		distanceLeft();
-		distanceRight();
-		distanceFront();
-
-		if (distanceL < 10){
-			PORTB |= (1 << PB6);
-			leftmotor_foward();
-			rightmotor_foward();
-		}else{
-			PORTB &= ~(1 << PB6);
-			brake();
+  //while(1) {
+		turnRight();
+		_delay_ms(1050);
+		brake();
+		
+		/*distanceL = distanceLeft();
+		distanceR = distanceRight();
+		distanceF = distanceFront();
+		distanceUF = distanceUpperFront();
+		brake();
+		if(distanceL < 10){
+			PORTB |= (1 << PB7);
+			forward();
+			_delay_ms(100);
+		}
+		else{
+			PORTB &= ~(1 << PB7);
 		}
     //=====================================
 		if (distanceF < 10){
-			PORTB |= (1 << PB7);
-      leftmotor_reverse();
-      rightmotor_reverse();
-		}else{
-			PORTB &= ~(1 << PB7);
-      brake();
-		}
-		//=====================================
-		if (distanceR < 10){
 			PORTD |= (1 << PD5);
-      turnLeft();
+			reverse();
+			_delay_ms(100);
 		}else{
 			PORTD &= ~(1 << PD5);
-      brake();
 		}
     //====================================
-    if (distanceUF < 10){
+		if (distanceUF < 10){
+			PORTD |= (1 << PD7);
+			turnRight();
+			_delay_ms(100);
+		}else{
+			PORTD &= ~(1 << PD7);
+		}
+	//=====================================
+		if (distanceR < 10){
 			PORTD |= (1 << PD6);
-      turnRight();
+			turnLeft();
+			_delay_ms(100);
 		}else{
 			PORTD &= ~(1 << PD6);
-		}
-  }
+		}*/
+  //}
   return 0;
 }

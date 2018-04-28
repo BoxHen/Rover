@@ -18,6 +18,7 @@ void algorithm(){
     if(distanceL < distanceR){ // go to left wall since it is closer
       //turnLeft(); // make this a 90deg turn - we will need encoders to do this
         turnLeft();
+		_delay_ms(1050);
       while(1){
         forward();
         if(distanceF<5 && distanceUpperFront>5){

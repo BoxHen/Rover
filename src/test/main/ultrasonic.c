@@ -4,6 +4,9 @@
 #include <avr/interrupt.h>
 #include "ultrasonic.h"
 
+uint8_t distanceL = 0x00, distanceF = 0x00, distanceUF = 0x00, distanceR = 0x00;
+uint8_t flags = 0x00; // storing zeros until flag is turned on
+
 // DETECTS BOTH RISING EDGE AND FALLING EDGE OF INT0
 // ON THE RISING EDGE , WE START THE COUNTER, WE WILL SET THE FLAG TO ZERO. WAITING FOR THE FLALING EDGE
 // AFTER THE FALLING EDGE , WE GET THE DISTANCE
@@ -44,8 +47,8 @@ ISR(INT0_vect){
 /*============================================================================*/
 void init_ultrasonic(){
 	DDRC = (1 << PC5 | 1 << PC4 | 1 << PC3 | 1 << PC2 | 1 << PC1);
-	DDRB = (1 << PB6 | 1 << PB7); // LEDS
-	DDRD = (1 << PD5 | 1 << PD6); // LEDS
+	DDRB = (1 << PB7); // LEDS
+	DDRD = (1 << PD5 | 1 << PD6 | 1 << PD7); // LEDS
 	//set WGM = 4: CTC mode clear on OCR1A
 	TCCR1A = 0x00;
 	TCCR1B = 0x01;// set clock no pre-scaling
@@ -62,7 +65,7 @@ void init_ultrasonic(){
 
 }
 /*============================================================================*/
-void distanceLeft(){ //use pcint6 PB6
+uint8_t distanceLeft(){ //use pcint6 PB7
 	flags |= (1 << 0);
 	//DISABLE external interrupt
 	PCMSK0 = 0x00;
@@ -74,9 +77,10 @@ void distanceLeft(){ //use pcint6 PB6
 	PCMSK0 = 0x40;
 	_delay_ms(60);
 	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
+	return distanceL;
 }
 
-void distanceFront(){ // use pcint8 PB7
+uint8_t distanceFront(){ // use pcint8 PD5
 	flags |= (1 << 1);
 	//DISABLE external interrupt
 	PCMSK1 = 0x00;
@@ -88,9 +92,10 @@ void distanceFront(){ // use pcint8 PB7
 	PCMSK1 = 0x01;
 	_delay_ms(60);
 	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
+	return distanceF;
 }
 
-void distanceRight(){ // use pcint20 PD5
+uint8_t distanceRight(){ // use pcint20 PD6
 	flags |= (1 << 2);
 	//DISABLE external interrupt
 	PCMSK2 = 0x00;
@@ -102,9 +107,10 @@ void distanceRight(){ // use pcint20 PD5
 	PCMSK2 = 0x10;
 	_delay_ms(60);
 	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
+	return distanceR;
 }
 
-void distanceUpperFront(){ // use INT0 PD6
+uint8_t distanceUpperFront(){ // use INT0 PD7
 	flags |= (1 << 3);
 	//DISABLE external interrupt
 	EIMSK = 0x00;
@@ -113,36 +119,9 @@ void distanceUpperFront(){ // use INT0 PD6
 	_delay_us(50);
 	PORTC &= ~(1 << PC2);
 	//ENABLE external interrupt
-	EIMSK = 0x01
+	EIMSK = 0x01;
 	_delay_ms(60);
 	// WAIT FOR INTERRUPTS TO FIRE DURING THE DELAY
+	return distanceUF;
 }
 /*============================================================================*/
-/*int main(){
-  init_ultrasonic();
-
-  while(1) {
-		distanceLeft();
-		distanceRight();
-		distanceFront();
-
-		if (distanceL < 10){
-			PORTB |= (1 << PB5);
-		}else{
-			PORTB &= ~(1 << PB5);
-		}
-
-		if (distanceF < 10){
-			PORTC |= (1 << PC1);
-		}else{
-			PORTC &= ~(1 << PC1);
-		}
-
-		if (distanceR < 10){
-			PORTC |= (1 << PC2);
-		}else{
-			PORTC &= ~(1 << PC2);
-		}
-  }
-  return 0;
-}*/

@@ -3,9 +3,14 @@
 
 #define F_CPU 1000000UL
 #include <avr/io.h>
-#include <stdint.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
 
-void PWM_left(uint8_t value);
-void PWM_right(uint8_t value);
+void init_PWM();
+
+void PWM_leftA(uint8_t value);
+void PWM_rightA(uint8_t value);
+void PWM_leftB(uint8_t value);
+void PWM_rightB(uint8_t value);
 
 #endif

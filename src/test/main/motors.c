@@ -1,18 +1,21 @@
 #include "ultrasonic.h"
 #include "motors.h"
+//#include "PWM.h"
 
 /*initialize the PORTs dedicated to the motors.
 You always have to call this in main to intialize the PORT I/O
 */
 void init_motors(){
-	//PB1 -> LEFTA  -- AIN
-	//PB2 -> LEFTB  -- BIN
-	//PB3 -> RIGHTA -- AIN
-	//PB4 -> RIGHTB -- BIN
+	//init_PWM();
+	//PB1 -> LEFTA  -- AIN -- PWM_leftA(uint8_t value); -- OCR0A
+	//PB2 -> LEFTB  -- BIN -- PWM_rightA(uint8_t value);-- OCR0B
+	
+	//PB3 -> RIGHTA -- AIN -- PWM_leftB(uint8_t value); -- OCR2A
+	//PB4 -> RIGHTB -- BIN -- PWM_rightB(uint8_t value);-- OCR2B
 	DDRB = (1 << PB4 | 1 << PB3 | 1 << PB2 | 1 << PB1 | 1 << PB0); //set as outputs
 	/*	DDRB = (1 << PB0); // output to other 328 based off COUNT value
 	    DDRD = ~(1 << PD7); //set as input for other 328*/
-	DDRD = 1 << PD7; // used to communicate with other 328
+	//------------DDRD = 1 << PD7; // used to communicate with other 328
 	brake();
 }
 /*
@@ -26,41 +29,57 @@ ____|_______|___________
 void leftmotor_reverse(){
 	PORTB &= ~(1 << PB1);// --AIN:0
 	PORTB |= (1 << PB2); // --BIN:1
+	//PWM_leftA(0xFF - value);
+	//PWM_rightA(0xFF);
 }
 
-void rightmotor_reverse(){
+void rightmotor_reverse( ){
 	PORTB &= ~(1 << PB3);// --AIN:0
 	PORTB |= (1 << PB4); // --BIN:1
+	//PWM_leftB(0xFF - value);
+	//PWM_rightB(0xFF);
 }
 /*==========================BRAKE============================*/
 void leftmotor_brake(){
 	PORTB |= (1 << PB1);//  --AIN:1
 	PORTB |= (1 << PB2); // --BIN:1
+	//PWM_leftA(0xFF);
+	//PWM_rightA(0xFF);
 }
 
 void rightmotor_brake(){
 	PORTB |= (1 << PB3);//  --AIN:1
 	PORTB |= (1 << PB4); // --BIN:1
+	//PWM_leftB(0xFF);
+	//PWM_rightB(0xFF);
 }
 /*==========================FORWARD============================*/
-void leftmotor_foward(){
+void leftmotor_foward( ){
 	PORTB |= (1 << PB1);//   --AIN:1
 	PORTB &= ~(1 << PB2); // --BIN:0
+	//PWM_leftA(0xFF);
+	//PWM_rightA(0x0FF - value);
 }
 
-void rightmotor_foward(){
+void rightmotor_foward( ){
 	PORTB |= (1 << PB3);//   --AIN:1
 	PORTB &= ~(1 << PB4); // --BIN:0
+	//PWM_leftB(0xFF);
+	//PWM_rightB(0x0FF - value);
 }
 /*==========================COAST============================*/
 void leftmotor_coast(){
 	PORTB &= ~(1 << PB1);//  --AIN:0
 	PORTB &= ~(1 << PB2); // --BIN:0
+	//PWM_leftA(0x00);
+	//PWM_rightA(0x00);
 }
 
 void rightmotor_coast(){
 	PORTB &= ~(1 << PB3);//  --AIN:0
 	PORTB &= ~(1 << PB4); // --BIN:0
+	//PWM_leftB(0x00);
+	//PWM_rightB(0x00);
 }
 /*======================================================*/
 void brake(){
@@ -69,19 +88,19 @@ void brake(){
 }
 
 void turnRight(){
-	PORTD |= (1 << PD7); // turn on PD7 so other 328 starts the turnCount
-	while( (PINB & (1 << PB0)) ){
+	//PORTD |= (1 << PD7); // turn on PD7 so other 328 starts the turnCount
+	//while( (PINB & (1 << PB0)) ){
 	leftmotor_foward();
 	rightmotor_reverse();
-	}
+	//}
 }
 
 void turnLeft(){
-	PORTD |= (1 << PD7); // turn on PD7 so other 328 starts the turnCount
-	while( (PINB & (1 << PB0)) ){
+	//PORTD |= (1 << PD7); // turn on PD7 so other 328 starts the turnCount
+	//while( (PINB & (1 << PB0)) ){
 	rightmotor_foward();
 	leftmotor_reverse();
-	}
+	//}
 }
 
 void forward(){

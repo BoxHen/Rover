@@ -6,14 +6,11 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-uint16_t distanceL, distanceF, distanceUF, distanceR;
-uint8_t flags; // storing zeros until flag is turned on
-
 void init_ultrasonic();
 
-void distanceLeft();
-void distanceFront();
-void distanceRight();
-void distanceUpperFront();
+uint8_t distanceLeft();
+uint8_t distanceFront();
+uint8_t distanceRight();
+uint8_t distanceUpperFront();
 
 #endif // ultrasonic_H

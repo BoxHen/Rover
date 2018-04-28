@@ -1,6 +1,7 @@
 #ifndef motors_H
 #define motors_H
 
+//#define speed 0xAA
 void init_motors();
 
 void leftmotor_foward();
