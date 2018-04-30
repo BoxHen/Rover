@@ -9,16 +9,65 @@
 void algorithm(){
   init_motors();
   init_ultrasonic();
+  int decision, prev_decision;
+
+  if(distanceL < distanceR) {decision = 1;}
+  else {decision = 2;}
 
   while(1) {
 		distanceLeft();
 		distanceRight();
 		distanceFront();
 
-    if(distanceL < distanceR){ // go to left wall since it is closer
+    switch(decision){
+      case 1:// left wall is closer
+          prev_decision = decision;
+          turnLeft(); _delay_ms(1050);
+          while( distanceF >= 10 ){
+            forward(); _delay_ms(100); // used so motors move or else it loops to fast for motors to process
+          }
+          if(distanceUF >= 10){decision = 3;} // obstacle avoid case
+          else {decision = *********;} // corner turn case
+          break;
+      case 2: // right wall is closer
+          prev_decision = decision;
+          turnRight(); _delay_ms(1050);
+          while( distanceF >= 10 ){
+            forward(); _delay_ms(100); // used so motors move or else it loops to fast for motors to process
+          }
+          if(distanceUF >= 10){decision = 4;} // obstacle avoid case
+          else {decision = *********;};} // corner turn case
+          break;
+      case 3: // obstacle turn for left wall start
+          turnRight(); _delay_ms(1050);
+          while(distanceL <= 15){ forward(); } // move forward if you are against the wall of the obstacle
+          turnLeft(); _delay_ms(1050);
+          while(distanceL >= 15){ forward(); } // after turn we will not be aginst the wall. move forward until you are
+          while(distanceL <= 15){ forward(); } // move forward if you are against the wall of the obstacle
+          turnLeft(); _delay_ms(1050);
+          while(distanceF >= 10){ forward(); } // move forward until front sensor sees a wall
+          turnRight(); _delay_ms(1050);
+          decision = *********;};
+          break;
+      case 4:
+          turnLeft(); _delay_ms(1050);
+          while(distanceL <= 15){ forward(); } // move forward if you are against the wall of the obstacle
+          turnRight(); _delay_ms(1050);
+          while(distanceR >= 15){ forward(); } // after turn we will not be aginst the wall. move forward until you are
+          while(distanceR <= 15){ forward(); } // move forward if you are against the wall of the obstacle
+          turnRight(); _delay_ms(1050);
+          while(distanceF >= 10){ forward(); } // move forward until front sensor sees a wall
+          turnLeft(); _delay_ms(1050);
+          decision = *********;};
+          break;
+
+    }
+
+
+    /*if(distanceL < distanceR){ // go to left wall since it is closer
       //turnLeft(); // make this a 90deg turn - we will need encoders to do this
         turnLeft();
-		_delay_ms(1050);
+		    _delay_ms(1050);
       while(1){
         forward();
         if(distanceF<5 && distanceUpperFront>5){
@@ -35,31 +84,7 @@ void algorithm(){
     }else{ // go to right wall since it is closer
       turnRight();
     }
-
-	// 	if (distanceL < 10){
-	// 		PORTB |= (1 << PB5);
-	// 		leftmotor_foward();
-	// 		rightmotor_foward();
-	// 	}else{
-	// 		PORTB &= ~(1 << PB5);
-	// 		brake();
-	// 	}
-  //   //=====================================
-	// 	if (distanceF < 10){
-	// 		PORTC |= (1 << PC1);
-  //
-	// 		//leftmotor_foward();
-	// 		//rightmotor_foward();
-	// 	}else{
-	// 		PORTC &= ~(1 << PC1);
-	// 	}
-	// 	//=====================================
-	// 	if (distanceR < 10){
-	// 		PORTC |= (1 << PC2);
-	// 	}else{
-	// 		PORTC &= ~(1 << PC2);
-	// 	}
-  // }
+*/
     return 0;
   }
 }
