@@ -15,9 +15,10 @@ void algorithm(){
   else {decision = 2;}
 
   while(1) {
-		distanceLeft();
-		distanceRight();
-		distanceFront();
+		distanceL = distanceLeft();
+		distanceR = distanceRight();
+		distanceF = distanceFront();
+		distanceUF = distanceUpperFront();
 
     switch(decision){
       case 1:// left wall is closer
@@ -76,8 +77,6 @@ void algorithm(){
           forward(); _delay_ms(400); // test this delay
           turnLeft(); _delay_ms(1050);
           decision = 5;
-
-
     }
 
 
