@@ -14,7 +14,7 @@ ISR(PCINT0_vect){ //Left
 	if(flags & (1 << 0)){
 		TCNT1 = 0;
 	}else{
-		distanceL = (TCNT1)/ 58;
+		distanceL = (TCNT1)/58; // divide by 58 to get cm but dont do tht since division is expensive 
 	}
 	flags &= ~(1 << 0);
 }
@@ -23,7 +23,7 @@ ISR(PCINT1_vect){ // Front
 	if(flags & (1 << 1)){
 		TCNT1 = 0;
 	}else{
-		distanceF = (TCNT1)/ 58;
+		distanceF = (TCNT1)/58;
 	}
 	flags &= ~(1 << 1);
 }
@@ -32,7 +32,7 @@ ISR(PCINT2_vect){ //Right
 	if(flags & (1 << 2)){
 		TCNT1 = 0;
 	}else{
-		distanceR = (TCNT1)/ 58;
+		distanceR = (TCNT1)/58;
 	}
 	flags &= ~(1 << 2);
 }
@@ -40,7 +40,7 @@ ISR(INT0_vect){
 	if(flags & (1 << 3)){
 		TCNT1 = 0;
 	}else{
-		distanceUF = (TCNT1)/ 58;
+		distanceUF = (TCNT1)/58;
 	}
 	flags &= ~(1 << 3); 
 }
