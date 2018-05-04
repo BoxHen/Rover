@@ -14,12 +14,13 @@ int main(){
   
   //uint8_t distanceL = 0x00; uint8_t distanceF = 0x00; uint8_t distanceR = 0x00; uint8_t distanceUF = 0x00; 
 uint8_t distanceL = 0x00;
-//uint8_t distanceR = 0x00;
+uint8_t distanceR = 0x00;
 uint8_t distanceF = 0x09;
+uint8_t distanceUF = 0x00; 
   //if(distanceL < distanceR) {decision = 1;}
   //else {decision = 2;}
   
- /* while(1) {
+  while(1) {
 		distanceL = distanceLeft();
 		distanceR = distanceRight();
 		distanceF = distanceFront();
@@ -40,7 +41,7 @@ uint8_t distanceF = 0x09;
    
   }
   return 0;
-}*/
+}
   /*while(1){
 		rightmotor_foward();
 		leftmotor_reverse();
@@ -50,7 +51,7 @@ uint8_t distanceF = 0x09;
 		if( (distanceL == distanceR) | (distanceL-2 <= distanceR < distanceL) | (distanceL <= distanceR < distanceL+2) ){break;} 
   }
   brake();*/
-  turnRight(); _delay_ms(1050);
+  /*turnRight(); _delay_ms(1050);
           while(distanceL <= 20){ forward(); distanceL = distanceLeft();} // move forward if you are against the wall of the obstacle
           turnLeft(); _delay_ms(1050);
           while(distanceL >= 20){ forward(); distanceL = distanceLeft();} // after turn we will not be aginst the wall. move forward until you are
@@ -59,6 +60,6 @@ uint8_t distanceF = 0x09;
           while(distanceF >= 5){ forward(); distanceF = distanceFront();} // move forward until front sensor sees a wall
           turnRight(); _delay_ms(1050);
 		  forward();
-  return 0;
-  }
+  return 0;*/
+  //}
 
