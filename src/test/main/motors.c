@@ -1,3 +1,7 @@
+#include <avr/io.h>
+#include <stdint.h>
+#include <avr/interrupt.h>
+
 #include "ultrasonic.h"
 #include "motors.h"
 //#include "PWM.h"
@@ -15,7 +19,8 @@ void init_motors(){
 	DDRB = (1 << PB4 | 1 << PB3 | 1 << PB2 | 1 << PB1 | 1 << PB0); //set as outputs
 	/*	DDRB = (1 << PB0); // output to other 328 based off COUNT value
 	    DDRD = ~(1 << PD7); //set as input for other 328*/
-	//------------DDRD = 1 << PD7; // used to communicate with other 328
+	//DDRB = (1 << PB7);// used to communicate with arduino
+	//DDRD = (1 << PD5 | 1 << PD6 | 1 << PD7);// used to communicate with arduino
 	brake();
 }
 /*
@@ -88,23 +93,25 @@ void brake(){
 }
 
 void turnRight(){
-	//PORTD |= (1 << PD7); // turn on PD7 so other 328 starts the turnCount
-	//while( (PINB & (1 << PB0)) ){
-	leftmotor_foward();
-	rightmotor_reverse();
+	//PORTB |= (1 << PB7); // turn on PD7 so other 328 starts the turnCount
+	//_delay_ms(50);
+	//while( (PIND & (1 << PD5)) ){ // if PD5 is on (from arduino), turn
+	leftmotor_foward(); _delay_ms(10);
+	rightmotor_reverse(); _delay_ms(10);
 	//}
 }
 
 void turnLeft(){
-	//PORTD |= (1 << PD7); // turn on PD7 so other 328 starts the turnCount
-	//while( (PINB & (1 << PB0)) ){
-	rightmotor_foward();
-	leftmotor_reverse();
+	//PORTD |= (1 << PD6); // turn on PD7 so other 328 starts the turnCount
+	//_delay_ms(50);
+	//while( (PIND & (1 << PD7)) ){
+	rightmotor_foward(); _delay_ms(10);
+	leftmotor_reverse(); _delay_ms(10);
 	//}
 }
 
 void forward(){
-	leftmotor_foward();
+	leftmotor_foward(); 
 	rightmotor_foward();
 	
 }

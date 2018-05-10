@@ -7,59 +7,78 @@
 #include "motors.h"
 //#include "PWM.h"
 
+//uint8_t distF1 = 0x00; uint8_t distF2 = 0x00; //uint8_t distR = 0x00; uint8_t distUF = 0x00;
+//uint8_t distL = 0x00;
+
 int main(){
   init_motors();
   init_ultrasonic();
+  
+
+  
+	/*distL = distanceLeft();
+	distR = distanceRight();
+	distF1 = distanceFront1();
+	distF2 = distanceFront2();
+	distUF = distanceUpperFront();
+	if(distF1 <= 20 && distF2 <= 20){
+		while(distF1 >= distF2){ // should turn left
+			turnLeft(); _delay_ms(50); 
+			brake();     _delay_ms(10);
+			distL = distanceLeft();
+			distR = distanceRight();
+			distF1 = distanceFront1();
+			distF2 = distanceFront2();
+			distUF = distanceUpperFront();
+		} return 0;
+		while(distF1 <= distF2){ // should turn right
+			turnRight(); _delay_ms(50); 
+			brake();     _delay_ms(10);
+			distL = distanceLeft();
+			distR = distanceRight();
+			distF1 = distanceFront1();
+			distF2 = distanceFront2();
+			distUF = distanceUpperFront();
+		} return 0;
+	}
+	return 0;
+}*/
   //int decision, prevDecision = 0, turnCount = 0;
   
   //uint8_t distanceL = 0x00; uint8_t distanceF = 0x00; uint8_t distanceR = 0x00; uint8_t distanceUF = 0x00; 
-uint8_t distanceL = 0x00;
-uint8_t distanceR = 0x00;
-uint8_t distanceF = 0x09;
-uint8_t distanceUF = 0x00; 
+uint16_t distanceL = 0x0000;
+uint16_t distanceR = 0x0000;
+uint16_t distanceF1 = 0x0000;
+uint16_t distanceF2 = 0x0000;
+uint16_t distanceUF = 0x0000; 
   //if(distanceL < distanceR) {decision = 1;}
   //else {decision = 2;}
   
   while(1) {
 		distanceL = distanceLeft();
 		distanceR = distanceRight();
-		distanceF = distanceFront();
+		distanceF1 = distanceFront1();
+		distanceF2 = distanceFront2();
 		distanceUF = distanceUpperFront();
 		
-		if(distanceL < 10){PORTB |= (1 << PB7);}
+		if(distanceL < 580){PORTB |= (1 << PB7);}
 		else{PORTB &= ~(1 << PB7);}
     //=====================================
-		if (distanceF < 10){PORTD |= (1 << PD5);}
+		if (distanceF1 < 580){PORTD |= (1 << PD5);}
 		else{PORTD &= ~(1 << PD5);}
     //====================================
-		if (distanceUF < 10){PORTD |= (1 << PD7);}
+		if (distanceUF < 580){PORTD |= (1 << PD7);}
 		else{PORTD &= ~(1 << PD7);}
 	//=====================================
-		if (distanceR < 10){PORTD |= (1 << PD6);}
+		if (distanceR < 580){PORTD |= (1 << PD6);}
 		else{PORTD &= ~(1 << PD6);}
 	//=====================================
+		if (distanceF2 < 580){PORTB |= (1 << PB0);}
+		else{PORTB &= ~(1 << PB0);}
    
   }
   return 0;
 }
-  /*while(1){
-		rightmotor_foward();
-		leftmotor_reverse();
-		_delay_ms(5);
-		distanceL = distanceLeft();  // check sensors
-		distanceR = distanceRight(); // check sensors
-		if( (distanceL == distanceR) | (distanceL-2 <= distanceR < distanceL) | (distanceL <= distanceR < distanceL+2) ){break;} 
-  }
-  brake();*/
-  /*turnRight(); _delay_ms(1050);
-          while(distanceL <= 20){ forward(); distanceL = distanceLeft();} // move forward if you are against the wall of the obstacle
-          turnLeft(); _delay_ms(1050);
-          while(distanceL >= 20){ forward(); distanceL = distanceLeft();} // after turn we will not be aginst the wall. move forward until you are
-          while(distanceL <= 20){ forward(); distanceL = distanceLeft();} // move forward if you are against the wall of the obstacle
-          turnLeft(); _delay_ms(1050);
-          while(distanceF >= 5){ forward(); distanceF = distanceFront();} // move forward until front sensor sees a wall
-          turnRight(); _delay_ms(1050);
-		  forward();
-  return 0;*/
-  //}
+
+  
 

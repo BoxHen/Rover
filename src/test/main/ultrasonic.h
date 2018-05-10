@@ -8,9 +8,10 @@
 
 void init_ultrasonic();
 
-uint8_t distanceLeft();
-uint8_t distanceFront();
-uint8_t distanceRight();
-uint8_t distanceUpperFront();
+uint16_t distanceLeft();
+uint16_t distanceFront1();
+uint16_t distanceFront2();
+uint16_t distanceRight();
+uint16_t distanceUpperFront();
 
 #endif // ultrasonic_H
