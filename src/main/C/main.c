@@ -1,70 +1,124 @@
-// David Jiang and Henry Chen
-// program to control the movement of the rover
-// Using 2 sensors to follow the left edge of the line
-
-#define F_CPU 8000000UL
-// defining header files to use on the code
-#include <util/delay.h>
-#include "motor.h"
-#include "qtr_driver.h"
-#include <stdint.h>
+#define F_CPU 1000000UL
 #include <avr/io.h>
+#include <stdint.h>
+#include <avr/interrupt.h>
 
+#include "ultrasonic.h"
+#include "algorithm.h"
+#include "motors.h"
 
-//function prototypes
-void move_forward();
-void turn_left();
-void turn_right();
-
-int main()
-{
-	//initialize driver and motors
-	init_QTR_driver();
-	init_motors();
-
-	unsigned char sensor_value; // variable to store the values from the sensor
+uint16_t distL = 0x0000; uint16_t distF1 = 0x0000; uint16_t distF2 = 0x0000; uint16_t distR = 0x0000; uint16_t distUF = 0x0000; 
 	
-	while(1){ // continuous loop, which checks the values from the sensor and act accordingly
-		sensor_value = get_QTR_value();
+int main(){
+  init_motors();
+  init_ultrasonic();
+  uint8_t turnCount = 0x00;
+  int decision = 1, delayCount = 0, prevDecision = 0;
+  
+  //uint8_t distL = 0x00; uint8_t distF = 0x00; uint8_t distR = 0x00; uint8_t distUF = 0x00; 
 
-		if((sensor_value & 0x01) && (sensor_value & 0x02)){ // the values from the sensor is 11, have to turn right
-		  turn_right();
-		}
-		else if((sensor_value == 0x00) || (sensor_value & 0x01)){ // the value from the sensor is 01 or 00, turn left 
-		  turn_left();
-		}
-	    else if (sensor_value & 0x02){ // the value from the sensor is 10, this means the rover is on the track. Move forward
-		  move_forward();
-		}
-		else{
-		  move_forward(); // default
-		}
-
+  sensor_update(distL, distF1, distF2, distR, distUF); 
+  if(distL < distR) {decision = 1;}
+  else {decision = 2;}
+  
+  while(1) {
+    sensor_update(distL, distF1, distF2, distR, distUF); 	
+    switch(decision){
+      case 1:// left wall is closer
+          turnLeft(); _delay_ms(delay); 
+				brake();_delay_ms(50);
+          prevDecision = 1; // used to alternate between turns for going up and turn maze
+          turnCount++;
+          if(turnCount >= 3){decision = 7;} // this will execute the updown traversal after we get to top left corner
+          else {decision = 5;} 
+          break;
+      case 2: // right wall is closer
+          turnRight(); _delay_ms(delay);
+				brake();_delay_ms(50);
+          prevDecision = 2; // used to alternate between turns for going up and turn maze
+          turnCount++;
+          if(turnCount >= 3){decision = 6;} // this will execute the updown traversal after we get to top right corner
+          else {decision = 5;}
+          break;
+      case 3: // obstacle turn for left wall start
+		  obstLeftAvoid(distL, distF1, distF2, distR);
+          decision = 5;
+          break;
+      case 4: // obstacle turn right
+          obstRightAvoid(distL, distF1, distF2, distR);
+          decision = 5;
+          break;
+      case 5: // move forward until we see a obstacle or wall
+          sensor_update(distL, distF1, distF2, distR, distUF); 
+          while( (distF1 >= 754)&&(distF2 >= 754) ){ 
+            forward(); //_delay_ms(150); brake(); _delay_ms(10); // used so motors move or else it loops to fast for motors to process
+			distF1 = distanceFront1(); distF2 = distanceFront2();
+          }
+          brake();
+				
+          reAdjustFrontL(distL, distF1, distF2, distR, distUF);
+	  reAdjustFrontR(distL, distF1, distF2, distR, distUF);
+          brake();
+          sensor_update(distL, distF1, distF2, distR, distUF); 
+          if     ( ((distF1 <= 1160) || (distF2 <= 1160)) && distUF >= 870 && distL <= 1160 ){decision = 3; break;} // obstacle avoid case for left wall
+          else if( ((distF1 <= 1160) || (distF2 <= 1160)) && distUF >= 870 && distR <= 1160 ){decision = 4; break;} // obstacle avoid  for right wall
+          else if( ((distF1 <= 1160) || (distF2 <= 1160)) && distUF >= 870 )                 {decision = 4; break;} // if obstacle is in the middle 
+          else if( ((distF1 <= 1160) || (distF2 <= 1160)) && distL <=  1160 )        	     {decision = 2; break;} // corner turn case for left corner
+          else if( ((distF1 <= 1160) || (distF2 <= 1160)) && distR <=  1160 )                {decision = 1; break;} //corner turn right corner
+          else if( prevDecision == 1 ) 						                                 {decision = 2; break;}
+          else /*( prevDecision == 2 )*/					                                 {decision = 1; break;}
+		  
+      case 6: // up/down motion from left corner
+		  delayCount = 0;
+		  sensor_update(distL, distF1, distF2, distR, distUF); 
+		  while( ((distF1 >= 754)&&(distF2 >= 754)) && (delayCount <= 300)) { // if no wall detected, proceed to move forward for a delay of 500ms
+			  forward(); //_delay_ms(20); 
+			  delayCount += 150; 
+			  sensor_update(distL, distF1, distF2, distR, distUF); 
+		  }
+				brake();_delay_ms(50);
+				turnRight(); _delay_ms(delay); 
+				brake();_delay_ms(50);
+          decision = 5;
+		  break;
+      case 7: // up/down motion from right corner
+		  delayCount = 0;
+		  sensor_update(distL, distF1, distF2, distR, distUF); 
+		  while( ((distF1 >= 754)&&(distF2 >= 754) ) && (delayCount <= 300)) { // if no wall detected, proceed to move forward for a delay of 500ms
+			  forward(); //_delay_ms(20); 
+			  delayCount += 150; 
+			  sensor_update(distL, distF1, distF2, distR, distUF); 
+		  }
+				brake();_delay_ms(50);
+				turnLeft(); _delay_ms(delay); 
+				brake();_delay_ms(50); 
+          decision = 5;
+		  break;
+	  //default: brake();
 	}
-
-	return 0;
+  }
+  return 0;
 }
 
-void move_forward(){ // function for the rover to move forward
-  rightmotor_foward();
-  leftmotor_foward();
-  _delay_ms(125);
-  brake();
-  _delay_ms(75);
-}
 
-void turn_left(){ // function for the rover to turn left
-  leftmotor_reverse();
-  rightmotor_foward();
-  _delay_ms(125);
-  brake();
-  _delay_ms(75);
-}
 
-void turn_right(){ // function for the rover to turn right
-  leftmotor_foward();
-  rightmotor_reverse();
-  _delay_ms(125);
-  brake();
-  _delay_ms(75);
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

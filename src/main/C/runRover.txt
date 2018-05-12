@@ -1,0 +1,7 @@
+avr-gcc -g -Wall -mmcu=atmega328 -O1 main.c algorithm.c motors.c ultrasonic.c -o main
+
+avrdude -c buspirate -P COM5 -p atmega328 
+
+avr-objcopy -O ihex -R .eeprom -R .fuse -R .lock main main.hex
+
+avrdude -c buspirate -P COM5 -p atmega328 -U flash:w:main.hex
