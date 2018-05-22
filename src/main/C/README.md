@@ -1,6 +1,5 @@
 ==============================================================================
-Project Title: CS212 – Lab 10 – infix expression calculator ***v1 allows for exponents***
-	Note: files are separated (see included files for summary) and no files are "unnecessary"
+Project Title: Obstacle Avoidance Rover - Junior Design Project 
 =================================================================================
 Included files:
 
