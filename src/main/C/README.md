@@ -1,5 +1,6 @@
 ==============================================================================
-Project Title: Obstacle Avoidance Rover - Junior Design Project 
+Project Title: Obstacle Avoidance Rover - Junior Design Project
+	note: mine detector(metal detect) was done on arduino  
 =================================================================================
 Included files:
 
