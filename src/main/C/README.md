@@ -1,7 +1,5 @@
-==============================================================================
-Project Title: Obstacle Avoidance Rover - Junior Design Project
-	note: mine detector(metal detect) was done on arduino  
-=================================================================================
+# Project Title: Obstacle Avoidance Rover - Junior Design Project
+# note: mine detector(metal detect) was done on arduino  
 Included files:
 
 	main.c       : This contains the main() - switch cases for rover algorithm 
@@ -16,8 +14,8 @@ Included files:
 	PWM.h        : motor control prototypes
 	ultrasonic.h : prototypes for ultrasonic sesnors 
 
-	runRover.txt : terminal commands for running with winAVR
-=================================================================================
+	runRover.txt : terminal commands for running with winAVR
+
 Running the program: 
 
 	On winAVR - avrdude:
