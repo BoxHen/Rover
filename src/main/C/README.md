@@ -1,5 +1,5 @@
 # Project Title: Obstacle Avoidance Rover - Junior Design Project
-# note: mine detector(metal detect) was done on arduino  
+	note: mine detector(metal detect) was done on arduino  
 Included files:
 
 	main.c       : This contains the main() - switch cases for rover algorithm 
@@ -30,5 +30,6 @@ Running the program:
 
 	TO RUN:
 
-	used a atmega328 microcontroller chip with the dagu rover 5 setup(additional resources included in resorces folder)
+	used a atmega328 microcontroller chip with the dagu rover 5 setup
+	(additional resources included in resorces folder)
 
